@@ -1,46 +1,30 @@
-from datetime import date
-import sqlite3
-class Model:
-	"""docstring for Model"""
-	def __init__(self):
-		#super(Model, self).__init__()
-		#self.arg = argi
-		pass
-	def save(self):
-		
+from donaclotilde import *
 
-		conn = sqlite3.connect('database.db')
-		cursor = conn.cursor()
+class Exemplo(Donaclotilde):
+    def __init__(self,):
+        self.entrada_select=[]
+        self.entrada_from_table=[]
+        self.entrada_where=[]
+        self.entrada_insert=[]
+        self.query=[]
 
-		data = date.today()
-		cursor.execute("INSERT INTO usuario (nome, numero, cor, criado_em)VALUES (?,?,?,?)",(self.nome,self.numero,self.cor, data))
 
-		conn.commit()
+    def list_all(self):
+        self.select("*")
+        self.from_table("autorizacao_debito")
+        sql=self.get()
+        dados = self.result_list(sql)
+        return dados
+    def list_filt(self, search=None ):
 
-		print('Dados inseridos com sucesso.')
+        self.select("id")
+        self.select("permissionario")
 
-		conn.close()
-		pass
-	def listall(self):
-		#lista somente os visivel verdadeiro
-		conn = sqlite3.connect('database.db')
-		cursor = conn.cursor()
-		cursor.execute("SELECT * FROM usuario;")
-		self.list=cursor.fetchall()
-		for linha in self.list:
-			print(linha)
-		
-		conn.close()
-		pass
-	def delet(self):
-		data = date.today()
-
-		conn = sqlite3.connect('database.db')
-		cursor = conn.cursor()
-			
-		cursor.execute("UPDATE usuario SET visivel = ?, criado_em = ? WHERE id = ?", (False, data, self.delete))
-		
-		conn.commit()
-		print('Dados atualizados com sucesso.')
-		conn.close()
-		pass
+        self.from_table("autorizacao_debito")
+        
+        if not search is None:
+            self.where(search, 'permissionario')
+        
+        sql=self.get()
+        dados = self.result_list(sql)
+        return dados

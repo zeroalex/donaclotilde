@@ -5,6 +5,6 @@ madruguinha = Exemplo()
 data = madruguinha.list_all()
 
 #print(data)
-
-data = madruguinha.list_filt("bena")
+busca=input()
+#data = madruguinha.list_filt(busca)
 print (data)

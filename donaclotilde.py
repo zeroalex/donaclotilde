@@ -17,6 +17,14 @@ class Donaclotilde:
     def connect_db(self):
         self.conn = sqlite3.connect('database.db')
         self.cursor = self.conn.cursor()
+    def clear_vars(self):
+        self.entrada_select=[]
+        self.entrada_count=[]
+        self.entrada_from_table=[]
+        self.entrada_insert=[]
+        self.entrada_where=[]
+        self.query=[]
+        
 
     def select(self,kwargs):
         self.entrada_select.append(kwargs)
@@ -26,27 +34,22 @@ class Donaclotilde:
         self.entrada_count.append(kwargs)
 
 
-    def where(self,busca, coluna, operator='LIKE', sign='any'):
+    def where(self,search, column , operator='LIKE', sign='any'):
         
 
-        """     
-        WHERE ContactName LIKE 'a%o'    Finds any values that start with "a" and ends with 
-        """
-
-
-        self.entrada_where.append(coluna)
+        self.entrada_where.append(column)
         self.entrada_where.append(operator)
         
         if operator=='LIKE':
-            if sign=='any': self.entrada_where.append('"%'+busca+'%"')
-            if sign=='start': self.entrada_where.append('"'+busca+'%"')
-            if sign=='end': self.entrada_where.append('"%'+busca+'"')
-            if sign=='second': self.entrada_where.append('"_'+busca+'%"')
-            if sign=='least2': self.entrada_where.append('"'+busca+'_%"')
-            if sign=='least3': self.entrada_where.append('"'+busca+'__%"')
+            if sign=='any': self.entrada_where.append('"%'+search+'%"')
+            if sign=='start': self.entrada_where.append('"'+search+'%"')
+            if sign=='end': self.entrada_where.append('"%'+search+'"')
+            if sign=='second': self.entrada_where.append('"_'+search+'%"')
+            if sign=='least2': self.entrada_where.append('"'+search+'_%"')
+            if sign=='least3': self.entrada_where.append('"'+search+'__%"')
 
         else:
-            self.entrada_where.append('"'+str(busca)+'"')
+            self.entrada_where.append('"'+str(search)+'"')
 
 
     def where_combining(self, operator):
@@ -61,8 +64,6 @@ class Donaclotilde:
 
     def result_list(self,sql):
         
-        
-
         self.connect_db()
         
         self.cursor.execute(sql)
@@ -92,7 +93,6 @@ class Donaclotilde:
     def order(self,kwargs):
         #escrever se é crescente ou decresente
 
-
         pass
 
         
@@ -116,54 +116,26 @@ class Donaclotilde:
         
         if self.entrada_where!=[]: self.query.append( 'WHERE '+ ' '.join(self.entrada_where))
         
-        print(self.entrada_where)
-        data = self.query
         
-        print(data)
-        self.entrada_select=[]
-        self.entrada_count=[]
-        self.entrada_from_table=[]
-        self.entrada_insert=[]
-        self.entrada_where=[]
-        self.query=[]
+        sql=self.turn_sql_string(self.query)
         
-        sql=self.turn_sql_string(data)
+        #print(data)
+        self.clear_vars()
+        
         print(sql)    
         return sql
 
     def set(self,tabela,valores,colunas):
         
-        self.entrada_insert.append("INSERT INTO")
+        self.entrada_insert.append("INSERT INTO "+tabela+" ( "+ ' , '.join(colunas)+" ) ")
         
-        self.entrada_insert.append(tabela)
-        self.entrada_insert.append("(")
-        
-        for x in colunas:
-            self.entrada_insert.append(x)
-            self.entrada_insert.append(" , ")
-        self.entrada_insert.pop()
-        self.entrada_insert.append(")")
+        self.entrada_insert.append("VALUES ( '" + "' , '".join(valores)+"' ) ")
 
-        self.entrada_insert.append("VALUES")
-        self.entrada_insert.append("(")
-        
-        for x in valores:
-            self.entrada_insert.append(' "'+x+'" ')
-            self.entrada_insert.append(" , ")
-        self.entrada_insert.pop()
-    
-        self.entrada_insert.append(")")
+        sql=self.turn_sql_string(self.entrada_insert)
 
+        self.clear_vars()
 
-        data = self.entrada_insert
-
-        self.entrada_select=[]
-        self.entrada_from_table=[]
-        self.entrada_insert=[]
-        self.entrada_where=[]
-        self.query=[]
-        
-        sql=self.turn_sql_string(data)
+        print(sql)
         return sql
     def setup(self,tabela,valores,colunas):
         

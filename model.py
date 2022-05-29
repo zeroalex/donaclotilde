@@ -9,19 +9,13 @@ from datetime import date
 import sqlite3
 
 
-class Model(Donaclotilde):
-	"""docstring for Model"""
-	def __init__(self):
-		#super(Model, self).__init__()
-		#self.arg = argi
-		self.usuario="defalt"
-		self.entrada_select=[]
-		self.entrada_from_table=[]
-		self.entrada_insert=[]
-		self.entrada_count=[]
-		self.entrada_where=[]
-		self.query=[]
 
+class Model(Donaclotilde):
+	"""ATRIBUTOS DO Model HERDADOS DE Donaclotilde"""
+	""" /entrada_select /entrada_count /entrada_from_table /entrada_where /entrada_insert /query """
+	def __init__(self):
+		super().__init__()
+		
 
 	def connect_db(self):
 		self.conn = sqlite3.connect('database.db')
@@ -52,23 +46,48 @@ class Model(Donaclotilde):
 		data = self.result_list(sql)
 		return data
 
-	def list_filter(self,search):
+
+
+	def list_filter(self,search=None, coluna=None):
 		
 		#self.select('id')
 		self.select('name')
-		self.select('adress')
-		self.select('number')
+
+		if coluna:
+			self.select('adress')
+		#self.select('number')
 		self.select('password')
-		self.select('last')
+		#self.select('last')
 		
 		self.from_table("user")
+
 		if search:
 			self.where(search,"name")
+			self.where_combining("AND")
+			self.where("sta","name","=")
+
+		sql = self.get()
+		data = self.result_list(sql)
+		return data		
+		pass
+
+	def list_count(self, search):
+		
+		self.count('*')
+		
+		self.from_table("user")
+
+		if search:
+			self.where(search,"name")
+			
+			self.where_combining("OR")
+			self.where("sta","name")
 			
 		sql = self.get()
 		data = self.result_list(sql)
 		return data		
 		pass
+		
 
 
 

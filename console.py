@@ -3,15 +3,21 @@ madruguinha = Model()
 
 
 
-#data = madruguinha.list_all()
-#print(data)
+data = madruguinha.list_all()
+print(data)
 
 
+busca=input()
+
+count = madruguinha.list_count(busca)
+print(count)
 
 print("search: ")
 busca=input()
-data = madruguinha.list_filter(busca)
-print(data)
+data = madruguinha.list_filter(busca )
+
+for x in data:
+	print(x)
 
 
 """

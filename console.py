@@ -2,11 +2,11 @@ from model import *
 madruguinha = Model()
 
 
-"""
+
 #listar tudo
 data = madruguinha.list_all()
 print(data)
-"""
+
 
 """
 #realizar busca simples -list_filter
@@ -64,11 +64,11 @@ print(data)
 """
 
 """
-#salvar apagar
+#salvar simples
 
 base={}
 
-base['name']="asd"
+base['name']="incluido"
 
 base['adress']="asdasd"
 
@@ -81,8 +81,27 @@ madruguinha.save(base)
 
 data = madruguinha.list_all()
 print(data)
+
 """
+"""
+#updadte
+
+base={}
+
+base['name']="midificado"
+
+base['adress']=" modificado"
+
+madruguinha.update(base)
+
+data = madruguinha.list_all()
+print(data)
+
+"""
+
+"""
+
 asd=[x for x in madruguinha.map.values()]
 print(asd)
-
+"""
 

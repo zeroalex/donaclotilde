@@ -17,6 +17,7 @@ class Donaclotilde:
     def connect_db(self):
         self.conn = sqlite3.connect('database.db')
         self.cursor = self.conn.cursor()
+        
     def clear_vars(self):
         self.entrada_select=[]
         self.entrada_count=[]
@@ -64,14 +65,11 @@ class Donaclotilde:
 
     def result_list(self,sql):
         
-        self.connect_db()
-        
+        self.connect_db()        
         self.cursor.execute(sql)
         dados=self.cursor.fetchall()
         self.conn.close()
-        
-        #print(dados)
-        
+
         lista=[list(x) for x in dados]
                 
         return lista
@@ -137,57 +135,32 @@ class Donaclotilde:
 
         print(sql)
         return sql
+    
     def setup(self,tabela,valores,colunas):
         
-        self.entrada_insert.append("UPDATE")
-        
-        self.entrada_insert.append(tabela)
-        self.entrada_insert.append("SET")
-        self.entrada_insert.append("(")
-        
-        for x in colunas:
-            self.entrada_insert.append(' "'+x+'" ')
-            self.entrada_insert.append(" , ")
-        self.entrada_insert.pop()
-        self.entrada_insert.append(")")
+        self.entrada_insert.append("UPDATE "+tabela+" SET ( "+ ' , '.join(colunas)+" ) ")
 
-        self.entrada_insert.append("=")
-        self.entrada_insert.append("(")
-        
-        for x in valores:
-            self.entrada_insert.append(' "'+x+'" ')
-            self.entrada_insert.append(" , ")
-        self.entrada_insert.pop()
-    
-        self.entrada_insert.append(")")
+        self.entrada_insert.append(" = ( '" + "' , '".join(valores)+"' ) ")
 
-        if self.entrada_where:
+        if self.entrada_where!=[]: self.entrada_insert.append( 'WHERE '+ ' '.join(self.entrada_where))
         
-            for x in self.entrada_where:
-                self.entrada_insert.append(x)
-        
+        sql=self.turn_sql_string(self.entrada_insert)
 
+        self.clear_vars()
 
-        data = self.entrada_insert
-
-        self.entrada_select=[]
-        self.entrada_from_table=[]
-        self.entrada_insert=[]
-        self.entrada_where=[]
-        self.query=[]
-        
-        sql=self.turn_sql_string(data)
+        print(sql)
         return sql
         
         
-    def insert(self,kwargs):
-        sql=kwargs
+    def insert(self,sql):
+        
         self.connect_db()
         self.cursor.execute(sql)
         self.conn.commit()
         self.conn.close()
-    def update(self,kwargs):
-        sql=kwargs
+
+    def update(self,sql):
+        
         self.connect_db()
         self.cursor.execute(sql)
         self.conn.commit()

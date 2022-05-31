@@ -46,6 +46,17 @@ class Model(Donaclotilde):
 		#print(sql)
 		self.insert(sql)
 
+	def update(self,kwargs):
+		
+		values=[x for x in kwargs.values()]
+		columns=[x for x in kwargs.keys()]
+		
+		self.where( 5 ,"id","=")
+		
+		sql = self.setup("user",values,columns)
+		#print(sql)
+		self.insert(sql)
+
 	def list_all(self):
 
 		self.select('*')

@@ -11,6 +11,8 @@ class Donaclotilde:
         self.entrada_from_table=[]
         self.entrada_where=[]
         self.entrada_insert=[]
+        self.entrada_limite=[]
+        self.entrada_order=[]
         self.query=[]
     
 
@@ -24,11 +26,14 @@ class Donaclotilde:
         self.entrada_from_table=[]
         self.entrada_insert=[]
         self.entrada_where=[]
+        self.entrada_limite=[]
+        self.entrada_order=[]
+
         self.query=[]
         
 
-    def select(self,kwargs):
-        self.entrada_select.append(kwargs)
+    def select(self,column):
+        self.entrada_select.append(column)
         
 
     def count(self,kwargs):
@@ -85,14 +90,24 @@ class Donaclotilde:
              
         return dado
  
-    def limit(self,kwargs):
-        #falta
-        pass
-    def order(self,kwargs):
-        #escrever se é crescente ou decresente
+    def limit(self,initial, final):
 
+        self.entrada_limite.append('LIMIT '+str(initial) +', '+str(final)+" ")
         pass
 
+
+    def order(self,column):
+        self.entrada_order.append(column)
+        
+        pass
+    def order_asc(self,column):
+        self.entrada_order.append(column + ' ASC' )
+        
+        pass
+    def order_desc(self,column):
+        self.entrada_order.append(column + ' DESC')
+        
+        pass
         
     def result_dict(self,sql):
 
@@ -114,13 +129,17 @@ class Donaclotilde:
         
         if self.entrada_where!=[]: self.query.append( 'WHERE '+ ' '.join(self.entrada_where))
         
+        if self.entrada_order!=[]: self.query.append( 'ORDER BY '+ ' , '.join( self.entrada_order))
         
+        if self.entrada_limite!=[]: self.query.append(' '.join( self.entrada_limite))
+        
+        #print(self.query)
         sql=self.turn_sql_string(self.query)
         
         #print(data)
         self.clear_vars()
         
-        print(sql)    
+        #print(sql)    
         return sql
 
     def set(self,tabela,valores,colunas):

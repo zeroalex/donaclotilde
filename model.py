@@ -139,4 +139,32 @@ class Model(Donaclotilde):
 		
 
 
+	def list_limite(self):
+
+		self.select('*')
+		
+		self.from_table("user")
+		self.limit(3,2)
+		sql = self.get()
+		data = self.result_list(sql)
+		return data
+
+	def list_order(self):
+
+		self.select('*')
+		
+		self.from_table("user")
+		
+		#self.order("name")
+		#self.order_desc("name")
+		
+		self.order_desc("number")
+		self.order_asc('name')
+		
+		sql = self.get()
+		data = self.result_list(sql)
+		return data
+
+
+
 

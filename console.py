@@ -105,3 +105,15 @@ asd=[x for x in madruguinha.map.values()]
 print(asd)
 """
 
+
+"""
+#listar com limite
+data = madruguinha.list_limite()
+print(data)
+"""
+"""
+#listar com ORDER
+data = madruguinha.list_order()
+for x in data:
+	print(x)
+"""
